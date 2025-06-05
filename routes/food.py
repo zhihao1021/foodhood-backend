@@ -32,7 +32,7 @@ ALREADY_FINISHED = HTTPException(
 )
 FILE_TOO_LARGE = HTTPException(
     status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
-    detail="File size exceeds 5MB limit"
+    detail="File size exceeds 10MB limit"
 )
 NO_FILE_SIZE = HTTPException(
     status_code=status.HTTP_411_LENGTH_REQUIRED,
@@ -102,7 +102,7 @@ async def upload_food_photos(
         size = f.size
         if size is None:
             raise NO_FILE_SIZE
-        if size > 1024 * 1024 * 5:
+        if size > 1024 * 1024 * 10:
             raise FILE_TOO_LARGE
 
         data = await f.read()
