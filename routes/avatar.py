@@ -66,12 +66,17 @@ async def update_avatar(uid: UIDDepends, file: UploadFile) -> None:
         data = output_bytes.getvalue()
     except:
         raise UNSUPPORTED_MEDIA_TYPE
-
-    avatar = Avatar(
-        uid=uid,
-        data=data,
-        content_type=content_type,
-    )
+    
+    avatar = await Avatar.find_one(Avatar.uid == uid)
+    if avatar is None:
+        avatar = Avatar(
+            uid=uid,
+            data=data,
+            content_type=content_type,
+        )
+    else:
+        avatar.data = data
+        avatar.content_type = content_type
     await avatar.save()
 
 
