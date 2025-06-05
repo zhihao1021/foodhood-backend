@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Response, status, UploadFile
-from PIL import Image
+from PIL import Image, ImageOps
 
 from io import BytesIO
 
@@ -107,9 +107,14 @@ async def upload_food_photos(
 
         data = await f.read()
         try:
+            output_bytes = BytesIO()
             with Image.open(BytesIO(data)) as img:
                 img.verify()
                 content_type = f.content_type or (img.format or "").lower()
+
+                img_sdr = ImageOps.autocontrast(img)
+                img_sdr.save(output_bytes, format=img.format)
+            data = output_bytes.getvalue()
         except:
             continue
 
