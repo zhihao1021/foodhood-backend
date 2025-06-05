@@ -31,7 +31,7 @@ with open("default_avatar.png", "rb") as default_avatar:
 
 
 @router.get(
-    path="/avatar",
+    path="",
     status_code=status.HTTP_200_OK,
 )
 async def get_avatar(uid: UIDDepends) -> Response:
@@ -43,7 +43,7 @@ async def get_avatar(uid: UIDDepends) -> Response:
 
 
 @router.put(
-    path="/avatar",
+    path="",
     status_code=status.HTTP_201_CREATED,
 )
 async def update_avatar(uid: UIDDepends, file: UploadFile) -> None:
@@ -70,7 +70,7 @@ async def update_avatar(uid: UIDDepends, file: UploadFile) -> None:
 
 
 @router.delete(
-    path="/avatar",
+    path="",
     status_code=status.HTTP_204_NO_CONTENT,
 )
 async def delete_avatar(uid: UIDDepends) -> None:
@@ -78,7 +78,7 @@ async def delete_avatar(uid: UIDDepends) -> None:
 
 
 @router.get(
-    path="/avatar/{uid}",
+    path="/{uid}",
     status_code=status.HTTP_200_OK,
 )
 async def get_avatar_by_uid(uid: str,) -> Response:
