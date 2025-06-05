@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, UploadFile
 from fastapi.responses import Response
-from PIL import Image
+from PIL import Image, ImageOps
 
 from io import BytesIO
 
@@ -55,9 +55,15 @@ async def update_avatar(uid: UIDDepends, file: UploadFile) -> None:
 
     data = await file.read()
     try:
+        output_bytes = BytesIO()
         with Image.open(BytesIO(data)) as img:
             img.verify()
             content_type = file.content_type or (img.format or "").lower()
+
+        with Image.open(BytesIO(data)) as img:
+            img_sdr = ImageOps.autocontrast(img)
+            img_sdr.save(output_bytes, format=img.format)
+        data = output_bytes.getvalue()
     except:
         raise UNSUPPORTED_MEDIA_TYPE
 
