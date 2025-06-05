@@ -42,7 +42,7 @@ async def get_avatar(uid: UIDDepends) -> Response:
     return Response(avatar.data, media_type=avatar.content_type)
 
 
-@router.put(
+@router.post(
     path="",
     status_code=status.HTTP_201_CREATED,
 )
