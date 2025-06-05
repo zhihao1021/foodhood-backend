@@ -51,11 +51,8 @@ async def cancel_order(
     order_id: str,
     user_id: UIDDepends
 ) -> None:
-    order = await Order.find_one(Order.uid == order_id, Order.userId == user_id)
-    if order is None:
-        raise ORDER_NOT_FOUND
-
-    await order.delete()
+    print(f"Cancel order {order_id} for user {user_id}")
+    await Order.find_one(Order.uid == order_id, Order.userId == user_id).delete()
 
 
 @router.put(
