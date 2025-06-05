@@ -112,6 +112,7 @@ async def upload_food_photos(
                 img.verify()
                 content_type = f.content_type or (img.format or "").lower()
 
+            with Image.open(BytesIO(data)) as img:
                 img_sdr = ImageOps.autocontrast(img)
                 img_sdr.save(output_bytes, format=img.format)
             data = output_bytes.getvalue()
