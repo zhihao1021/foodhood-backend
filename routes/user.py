@@ -1,7 +1,7 @@
 from beanie.operators import Set
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, HTTPException
 
-from schemas.user import UserUpdate, UserView
+from schemas.user import User, UserUpdate, UserView
 
 from .auth import UserDepends
 
@@ -35,3 +35,17 @@ async def update_self_data(user: UserDepends, data: UserUpdate) -> UserView:
     user = await user.update(Set(data.model_dump(exclude_none=True, exclude=set(excludes))))
 
     return UserView(**user.model_dump())
+
+
+@router.get(
+    path="/{user_id}",
+    response_model=UserView,
+    status_code=status.HTTP_200_OK,
+)
+async def get_user_data(user_id: str) -> UserView:
+    user = await User.find_one(User.uid == user_id, projection_model=UserView)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    return user
